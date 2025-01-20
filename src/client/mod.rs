@@ -1,20 +1,24 @@
+use crate::error::{Error, ErrorKind};
 use crate::event::handle_event;
+use crate::event::registry::EventRegistry;
 use futures_util::StreamExt;
 use tokio_tungstenite::connect_async;
 use tracing::{error, info};
 use tungstenite::client::IntoClientRequest;
-use crate::error::{Error, ErrorKind};
-use crate::event::registry::EventRegistry;
 
 pub struct Client {
     uri: String,
     access_token: String,
-    pub(crate) event_registry: EventRegistry
+    pub(crate) event_registry: EventRegistry,
 }
 
 impl Client {
     pub fn new(uri: String, access_token: String) -> Self {
-        Client { uri, access_token, event_registry: EventRegistry::new() }
+        Client {
+            uri,
+            access_token,
+            event_registry: EventRegistry::new(),
+        }
     }
 
     pub async fn run(&self) -> Result<(), Error> {
@@ -28,7 +32,8 @@ impl Client {
             );
         }
 
-        let (mut ws_stream, _) = connect_async(request).await
+        let (mut ws_stream, _) = connect_async(request)
+            .await
             .map_err(|_| Error(ErrorKind::ConnectError))?;
 
         while let Some(Ok(msg)) = ws_stream.next().await {

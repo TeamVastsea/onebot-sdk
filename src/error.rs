@@ -1,4 +1,3 @@
-
 #[derive(Debug)]
 pub struct Error(pub ErrorKind);
 
@@ -13,5 +12,4 @@ impl From<serde_json::Error> for Error {
     fn from(e: serde_json::Error) -> Self {
         Error(ErrorKind::ParseError(Some(e)))
     }
-    
 }

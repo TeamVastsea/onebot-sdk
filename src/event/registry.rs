@@ -1,6 +1,5 @@
-use tokio::time::Instant;
-use crate::event::{Context, EventType};
 use crate::event::meta::{MetaEvent, MetaEventType};
+use crate::event::{Context, EventType};
 
 pub struct EventRegistry {
     meta_event: MetaEvents,
@@ -38,22 +37,19 @@ impl EventRegistry {
     }
 
     pub fn run_event(&self, event: &EventType, context: Context) {
-        
         match event {
-            EventType::Meta(meta) => {
-                match meta.meta_event_type {
-                    MetaEventType::Lifecycle => {
-                        for f in &self.meta_event.life_cycle {
-                            f(meta, &context);
-                        }
-                    }
-                    MetaEventType::Heartbeat => {
-                        for f in &self.meta_event.heartbeat {
-                            f(meta, &context);
-                        }
+            EventType::Meta(meta) => match meta.meta_event_type {
+                MetaEventType::Lifecycle => {
+                    for f in &self.meta_event.life_cycle {
+                        f(meta, &context);
                     }
                 }
-            }
+                MetaEventType::Heartbeat => {
+                    for f in &self.meta_event.heartbeat {
+                        f(meta, &context);
+                    }
+                }
+            },
             EventType::Message => {}
             EventType::Notice => {}
             EventType::Request => {}

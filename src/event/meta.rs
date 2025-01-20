@@ -34,7 +34,7 @@ impl MetaEvent {
             },
         })
     }
-    
+
     pub fn get_event_name(&self) -> &str {
         match self.meta_event_type {
             MetaEventType::Lifecycle => "meta.lifecycle",
