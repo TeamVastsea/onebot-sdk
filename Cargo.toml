@@ -1,0 +1,15 @@
+[package]
+name = "onebot-sdk"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = { version = "1.0.217", features = ["derive"] }
+tokio = { version = "1.43.0", features = ["full"] }
+tokio-websockets = { version = "0.11.0", features = ["client", "rand", "ring"] }
+tokio-tungstenite = "0.26.1"
+tungstenite = "0.26.1"
+futures-util = "0.3.31"
+serde_json = "1.0.137"
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"
