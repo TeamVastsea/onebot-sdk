@@ -1,8 +1,10 @@
+pub mod message;
 mod meta;
 pub mod registry;
 
 use crate::client::Client;
 use crate::error::{Error, ErrorKind};
+use crate::event::message::MessageEvent;
 use crate::event::meta::MetaEvent;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -11,7 +13,7 @@ use tokio::time::Instant;
 #[derive(Clone, Debug)]
 pub enum EventType {
     Meta(MetaEvent),
-    Message,
+    Message(MessageEvent),
     Notice,
     Request,
 }
@@ -38,7 +40,9 @@ pub(crate) fn handle_event(client: &Client, incoming: &str) -> Result<(), Error>
         "meta_event" => {
             EventType::Meta(MetaEvent::from_event(event).ok_or(Error(ErrorKind::ParseError(None)))?)
         }
-        "message" => EventType::Message,
+        "message" => EventType::Message(
+            MessageEvent::from_event(event).ok_or(Error(ErrorKind::ParseError(None)))?,
+        ),
         "notice" => EventType::Notice,
         "request" => EventType::Request,
         _ => {

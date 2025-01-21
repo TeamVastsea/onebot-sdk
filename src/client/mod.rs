@@ -39,7 +39,7 @@ impl Client {
         while let Some(Ok(msg)) = ws_stream.next().await {
             if let Ok(text) = msg.to_text() {
                 if let Err(err) = handle_event(self, text) {
-                    error!("Event {} error: {:?}", text, err);
+                    error!("{:?} in {}", err, text);
                 }
             }
         }
